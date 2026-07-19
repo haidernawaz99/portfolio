@@ -1,19 +1,72 @@
-import { Button } from "@/components/ui/button"
+import LiquidEther from "@/components/LiquidEther"
+import { Dock } from "@/components/Dock"
+import { HomePage } from "@/components/HomePage"
+import { ProjectsPage } from "@/components/ProjectsPage"
+import { useActivePage } from "@/hooks/useActivePage"
+import { useIsMobile } from "@/hooks/useIsMobile"
+import {
+  profile,
+  skills,
+  experiences,
+  education,
+  certifications,
+  projects,
+} from "@/data"
+
+// LiquidEther resolution — lower on mobile for better performance
+const ETHER_RESOLUTION_DESKTOP = 0.5
+const ETHER_RESOLUTION_MOBILE = 0.3
+
+// Purple/violet palette matching the design
+const ETHER_COLORS = ["#5227FF", "#FF9FFC", "#B497CF"]
 
 export function App() {
+  const { activePage, setActivePage } = useActivePage("home")
+  const isMobile = useIsMobile()
+
+  const etherResolution = isMobile
+    ? ETHER_RESOLUTION_MOBILE
+    : ETHER_RESOLUTION_DESKTOP
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Layer 1: Full-viewport animated background */}
+      <div className="fixed inset-0 z-0" aria-hidden="true">
+        <LiquidEther
+          colors={ETHER_COLORS}
+          resolution={etherResolution}
+          mouseForce={20}
+          cursorSize={100}
+          autoDemo={true}
+          autoSpeed={0.5}
+          autoIntensity={2.2}
+          autoResumeDelay={3000}
+        />
       </div>
+
+      {/* Layer 2: Page content */}
+      <div className="relative z-10 w-full h-full">
+        {activePage === "home" && (
+          <HomePage
+            key="home"
+            profile={profile}
+            skills={skills}
+            experiences={experiences}
+            education={education}
+            certifications={certifications}
+          />
+        )}
+        {activePage === "projects" && (
+          <ProjectsPage key="projects" projects={projects} />
+        )}
+      </div>
+
+      {/* Layer 3: Navigation dock */}
+      <Dock
+        activePage={activePage}
+        onNavigate={setActivePage}
+        isMobile={isMobile}
+      />
     </div>
   )
 }
