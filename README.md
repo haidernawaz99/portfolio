@@ -1,21 +1,64 @@
-# React + TypeScript + Vite + shadcn/ui
+# Portfolio
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+A single-page portfolio built with React, TypeScript, Vite, Tailwind CSS v4, and shadcn/ui.
 
-## Adding components
+## Tech Stack
 
-To add components to your app, run the following command:
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS v4
+- shadcn/ui
+
+## Getting Started
+
+Install dependencies:
+
+```bash
+yarn install
+```
+
+Start the development server:
+
+```bash
+yarn dev
+```
+
+## Available Scripts
+
+- `yarn dev`: Run Vite dev server (host enabled)
+- `yarn typecheck`: Run TypeScript checks with no emit
+- `yarn lint`: Run ESLint
+- `yarn build`: Build app (`tsc -b && vite build`)
+- `yarn preview`: Preview production build
+- `yarn format`: Format TypeScript files with Prettier
+
+## Project Structure
+
+- `src/App.tsx`: root composition and page switching
+- `src/components`: UI and section components
+- `src/data`: typed static content (profile, projects, skills, etc.)
+- `src/types`: shared domain types
+- `src/hooks`: app-specific hooks
+- `src/index.css`: global styles and animation primitives
+
+## UI Components (shadcn)
+
+Add a new shadcn component:
 
 ```bash
 npx shadcn@latest add button
 ```
 
-This will place the ui components in the `src/components` directory.
+Components are generated in `src/components/ui`.
 
-## Using components
+## AI Agent Customization
 
-To use the components in your app, import them as follows:
+Repository-level agent guidance is documented in [AGENTS.md](AGENTS.md).
 
-```tsx
-import { Button } from "@/components/ui/button"
-```
+Focused file instructions are available in:
+
+- [.github/instructions/data-and-types.instructions.md](.github/instructions/data-and-types.instructions.md)
+- [.github/instructions/visual-effects.instructions.md](.github/instructions/visual-effects.instructions.md)
+
+These are used to keep edits consistent in high-impact areas (data/type synchronization and effect-heavy visual components).
