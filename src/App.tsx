@@ -36,8 +36,6 @@ export function App() {
           colors={ETHER_COLORS}
           resolution={etherResolution}
           autoResumeDelay={3000}
-          isViscous
-          viscous={30}
         />
       </div>
 
