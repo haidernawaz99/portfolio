@@ -29,23 +29,20 @@ export function App() {
     : ETHER_RESOLUTION_DESKTOP
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden">
       {/* Layer 1: Full-viewport animated background */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
         <LiquidEther
           colors={ETHER_COLORS}
           resolution={etherResolution}
-          mouseForce={20}
-          cursorSize={100}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
           autoResumeDelay={3000}
+          isViscous
+          viscous={30}
         />
       </div>
 
       {/* Layer 2: Page content */}
-      <div className="relative z-10 w-full h-full">
+      <div className="relative z-10 h-full w-full">
         {activePage === "home" && (
           <HomePage
             key="home"

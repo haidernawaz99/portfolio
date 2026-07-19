@@ -21,7 +21,7 @@ interface DockProps {
   isMobile: boolean
 }
 
-export function Dock({ activePage, onNavigate, isMobile }: DockProps) {
+export function Dock({ activePage, onNavigate }: DockProps) {
   const handleItemClick = (item: DockItemConfig) => {
     if (item.id === "linkedin" && item.url) {
       window.open(item.url, "_blank", "noopener,noreferrer")
