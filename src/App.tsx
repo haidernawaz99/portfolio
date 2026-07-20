@@ -13,10 +13,6 @@ import {
 import { Dock } from "./components/Dock"
 import { ETHER_COLORS } from "./data/colors"
 
-// LiquidEther resolution — lower on mobile for better performance
-const ETHER_RESOLUTION_DESKTOP = 0.5
-const ETHER_RESOLUTION_MOBILE = 0.3
-
 // Lazy load the LiquidEther component to improve initial load performance
 const LiquidEther = lazy(() => import("@/components/LiquidEther"))
 
