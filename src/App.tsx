@@ -10,22 +10,18 @@ import {
   certifications,
   projects,
 } from "@/data"
+import { Dock } from "./components/Dock"
+import { ETHER_COLORS } from "./data/colors"
 
 // LiquidEther resolution — lower on mobile for better performance
 const ETHER_RESOLUTION_DESKTOP = 0.5
 const ETHER_RESOLUTION_MOBILE = 0.3
-
-// Purple/violet palette matching the design — shared with GradientText in GreetingBanner
-export const ETHER_COLORS = ["#5227FF", "#FF9FFC", "#B497CF"]
 
 // Lazy load the LiquidEther component to improve initial load performance
 const LiquidEther = lazy(() => import("@/components/LiquidEther"))
 
 // Lazy load the ProjectsPage component to improve initial load performance
 const ProjectsPage = lazy(() => import("@/components/ProjectsPage"))
-
-// Lazy load the Dock component to improve initial load performance
-const Dock = lazy(() => import("@/components/Dock"))
 
 export function App() {
   const { activePage, setActivePage } = useActivePage("home")

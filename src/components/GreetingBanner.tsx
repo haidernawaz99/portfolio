@@ -1,5 +1,5 @@
+import { ETHER_COLORS } from "@/data/colors"
 import { ChevronDown } from "lucide-react"
-import { ETHER_COLORS } from "@/App"
 import { lazy, Suspense } from "react"
 
 const GradientText = lazy(() => import("@/components/GradientText"))
