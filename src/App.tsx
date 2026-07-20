@@ -15,8 +15,8 @@ import {
 const ETHER_RESOLUTION_DESKTOP = 0.5
 const ETHER_RESOLUTION_MOBILE = 0.3
 
-// Purple/violet palette matching the design
-const ETHER_COLORS = ["#5227FF", "#FF9FFC", "#B497CF"]
+// Purple/violet palette matching the design — shared with GradientText in GreetingBanner
+export const ETHER_COLORS = ["#5227FF", "#FF9FFC", "#B497CF"]
 
 // Lazy load the LiquidEther component to improve initial load performance
 const LiquidEther = lazy(() => import("@/components/LiquidEther"))

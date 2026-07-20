@@ -1,4 +1,8 @@
 import { ChevronDown } from "lucide-react"
+import { ETHER_COLORS } from "@/App"
+import { lazy, Suspense } from "react"
+
+const GradientText = lazy(() => import("@/components/GradientText"))
 
 export function GreetingBanner() {
   return (
@@ -6,8 +10,16 @@ export function GreetingBanner() {
       id="greeting-banner"
       className="flex w-full max-w-180 flex-col items-center justify-center px-4 py-40 text-center"
     >
-      <h2 className="m-0 text-[clamp(2rem,6vw,3.5rem)] font-bold tracking-tight text-white drop-shadow-[0_2px_16px_rgba(167,139,250,0.3)]">
-        Hi! I'm Haider!
+      <h2 className="m-0 text-[clamp(2rem,6vw,3.5rem)] font-bold tracking-tight drop-shadow-[0_2px_16px_rgba(167,139,250,0.3)]">
+        <Suspense fallback={<span className="font-bold">Hi! I'm Haider!</span>}>
+          <GradientText
+            colors={ETHER_COLORS}
+            animationSpeed={3.5}
+            showBorder={false}
+          >
+            <p className="font-bold">Hi! I'm Haider!</p>
+          </GradientText>
+        </Suspense>
         <span
           className="inline-block origin-[70%_70%] animate-wave"
           role="img"
