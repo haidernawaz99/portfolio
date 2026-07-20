@@ -27,17 +27,13 @@ export function App() {
   const { activePage, setActivePage } = useActivePage("home")
   const isMobile = useIsMobile()
 
-  const etherResolution = isMobile
-    ? ETHER_RESOLUTION_MOBILE
-    : ETHER_RESOLUTION_DESKTOP
-
   return (
     <div className="relative h-full w-full overflow-hidden">
       {/* Layer 1: Full-viewport animated background */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
         <LiquidEther
           colors={ETHER_COLORS}
-          resolution={etherResolution}
+          resolution={0.3}
           autoResumeDelay={3000}
         />
       </div>
