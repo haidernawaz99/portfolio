@@ -8,7 +8,7 @@ interface ProjectsPageProps {
   projects: Project[]
 }
 
-export default function ProjectsPage({ projects }: ProjectsPageProps) {
+export function ProjectsPage({ projects }: ProjectsPageProps) {
   return (
     <main
       id="projects-page"

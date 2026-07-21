@@ -1,4 +1,4 @@
-import { lazy } from "react"
+import { lazy, Suspense } from "react"
 import { HomePage } from "@/components/HomePage"
 import { useActivePage } from "@/hooks/useActivePage"
 import { useIsMobile } from "@/hooks/useIsMobile"
@@ -12,12 +12,10 @@ import {
 } from "@/data"
 import { Dock } from "./components/Dock"
 import { ETHER_COLORS } from "./data/colors"
+import { ProjectsPage } from "./components/ProjectsPage"
 
 // Lazy load the LiquidEther component to improve initial load performance
 const LiquidEther = lazy(() => import("@/components/LiquidEther"))
-
-// Lazy load the ProjectsPage component to improve initial load performance
-const ProjectsPage = lazy(() => import("@/components/ProjectsPage"))
 
 export function App() {
   const { activePage, setActivePage } = useActivePage("home")
@@ -27,11 +25,13 @@ export function App() {
     <div className="relative h-full w-full overflow-hidden">
       {/* Layer 1: Full-viewport animated background */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
-        <LiquidEther
-          colors={ETHER_COLORS}
-          resolution={0.3}
-          autoResumeDelay={3000}
-        />
+        <Suspense fallback={null}>
+          <LiquidEther
+            colors={ETHER_COLORS}
+            resolution={0.3}
+            autoResumeDelay={3000}
+          />
+        </Suspense>
       </div>
 
       {/* Layer 2: Page content */}
