@@ -4,6 +4,10 @@ import { lazy, Suspense } from "react"
 
 const GradientText = lazy(() => import("@/components/GradientText"))
 
+function GreetingText() {
+  return <p className="font-bold">Hi! I'm Haider!</p>
+}
+
 export function GreetingBanner() {
   return (
     <section
@@ -11,13 +15,13 @@ export function GreetingBanner() {
       className="flex w-full max-w-180 flex-col items-center justify-center px-4 py-40 text-center"
     >
       <h2 className="m-0 text-[clamp(2rem,6vw,3.5rem)] font-bold tracking-tight drop-shadow-[0_2px_16px_rgba(167,139,250,0.3)]">
-        <Suspense fallback={<span className="font-bold">Hi! I'm Haider!</span>}>
+        <Suspense fallback={<GreetingText />}>
           <GradientText
             colors={ETHER_COLORS}
             animationSpeed={3.5}
             showBorder={false}
           >
-            <p className="font-bold">Hi! I'm Haider!</p>
+            <GreetingText />
           </GradientText>
         </Suspense>
         <span
