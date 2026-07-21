@@ -10,9 +10,9 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
     <header className="flex flex-col gap-5">
       <div>
-        <h1 className="m-0 text-[clamp(1.5rem,4vw,2.4rem)] leading-[1.1] font-bold tracking-tight text-[rgba(255,255,255,0.95)] drop-shadow-[0_2px_12px_rgba(167,139,250,0.25)]">
+        <h2 className="m-0 text-[clamp(1.5rem,4vw,2.4rem)] leading-[1.1] font-bold tracking-tight text-[rgba(255,255,255,0.95)] drop-shadow-[0_2px_12px_rgba(167,139,250,0.25)]">
           {profile.name}
-        </h1>
+        </h2>
         <p className="mt-1.5 text-[0.78rem] leading-relaxed font-medium text-[var(--violet)] sm:text-[0.85rem]">
           {profile.title}
         </p>
