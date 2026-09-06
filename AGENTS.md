@@ -23,7 +23,7 @@ Whenever you touch the codebase, review each section below and update any part t
 | Change a script in `package.json` | **Runbook** |
 | Add/remove a high-risk file | **High-Risk Files** table |
 | Add a new change pattern not covered by an existing playbook | **Change Playbooks** — add a new sub-section |
-| Update content (profile, experience, projects, etc.) | Update `public/index.md` and `public/sitemap.xml` `<lastmod>` (see **Agent-Discoverability Files**) — _not_ this file |
+| Update content (profile, experience, projects, etc.) | Update `<lastmod>` in `public/sitemap.xml` (see **Agent-Discoverability Files**) — _not_ this file |
 
 > These updates must be part of the **same commit** as the code change, not a follow-up. If the change is exploratory and later reverted, revert the docs too.
 
@@ -67,8 +67,6 @@ All three must pass cleanly (zero errors, zero new warnings).
 
 ```
 portfolio/
-├── worker.ts                     # ⚠️ Cloudflare Worker entry point — Markdown content negotiation
-├── wrangler.jsonc                # Wrangler config — references worker.ts + dist/ asset directory
 ├── html/seo/                     # HTML partials injected into index.html at build time
 │   ├── primary.html              # <title>, <meta description>, canonical
 │   ├── og.html                   # Open Graph tags
@@ -78,8 +76,7 @@ portfolio/
 ├── public/                       # Copied verbatim to dist/ by Vite
 │   ├── favicon.svg
 │   ├── og-image.png
-│   ├── sitemap.xml               # XML sitemap (keep <lastmod> updated on content changes)
-│   └── index.md                  # Markdown snapshot of the portfolio (served to AI agents)
+│   └── sitemap.xml               # XML sitemap (keep <lastmod> updated on content changes)
 ├── src/
 │   ├── main.tsx                  # React entry point
 │   ├── App.tsx                   # Root: page switching + LiquidEther background layer
@@ -186,7 +183,6 @@ The app uses **state-based navigation** — no router, no URL changes.
 - `erasableSyntaxOnly: true` — no `enum`, no `namespace`, no parameter properties.
 - `verbatimModuleSyntax: true` — always use `import type` for type-only imports.
 - Path alias: `@/` maps to `src/`. Use it for all cross-folder imports.
-- The `functions/` directory is **not** included in `tsconfig.app.json` — it is compiled by Cloudflare's Workers runtime separately.
 
 ---
 
@@ -220,29 +216,15 @@ These files live in `public/` and are served as static assets:
 | File | Purpose |
 |---|---|
 | `public/sitemap.xml` | XML sitemap — list all public pages; update `<lastmod>` when pages are added or removed |
-| `public/index.md` | Full Markdown snapshot of the portfolio — **keep in sync when profile/experience/projects/skills/education/certifications change** |
-
-### Markdown Content Negotiation (`worker.ts`)
-
-The site is deployed as a **Cloudflare Worker** (not Pages). `worker.ts` is the Worker entry point; it wraps the static-asset bundle (`dist/`) via `env.ASSETS`:
-
-- If `Accept` header contains `text/markdown` → fetches `/index.md` from assets, returns it with `Content-Type: text/markdown`, `Vary: Accept`, and `x-markdown-tokens`.
-- Otherwise → serves the static asset normally but stamps `Vary: Accept` so caches never conflate HTML and Markdown variants.
-
-`wrangler.jsonc` at the repo root references `worker.ts` as `main` and `dist/` as the asset directory. **Do not remove `main` from `wrangler.jsonc`** — without it the Worker script is not deployed and all requests are served as plain static assets with no content negotiation.
-
-**When you update content in `src/data/`, you must also update `public/index.md`** to keep the Markdown snapshot in sync.
 
 ---
-
 
 ## Change Playbooks
 
 ### Add or modify content (profile, skills, experience, projects, education, certifications)
 1. Edit the relevant file in `src/data/`.
-2. Update `public/index.md` to reflect the same change.
-3. Update `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD).
-4. Run `yarn typecheck && yarn lint && yarn build`.
+2. Update `<lastmod>` in `public/sitemap.xml` to today's date (YYYY-MM-DD).
+3. Run `yarn typecheck && yarn lint && yarn build`.
 
 ### Add a new page/section
 1. Add the new `PageId` to the union in `src/types/index.ts`.
@@ -250,7 +232,7 @@ The site is deployed as a **Cloudflare Worker** (not Pages). `worker.ts` is the 
 3. Add the nav entry to `DOCK_ITEMS` in `src/components/Dock.tsx`.
 4. Wire the conditional render in `src/App.tsx`.
 5. If the section has new data shape, add a type to `src/types/index.ts` and a data file to `src/data/`.
-6. Update `public/index.md` and `public/sitemap.xml`.
+6. Update `public/sitemap.xml`.
 
 ### Add an SEO/meta change
 - Edit the relevant file in `html/seo/` (not `index.html`).
@@ -278,8 +260,6 @@ This scaffolds into `src/components/ui/`. Do not hand-write shadcn components.
 | `src/components/GlassSurface.tsx` | 🔴 HIGH | Complex SVG filter pipeline; visual regressions are subtle |
 | `src/index.css` | 🟡 MEDIUM | Many components depend on the CSS class names defined here |
 | `src/types/index.ts` | 🟡 MEDIUM | Type changes ripple through all components and data files |
-| `worker.ts` | 🟡 MEDIUM | Runs on every request at the edge; caching semantics are sensitive |
-| `wrangler.jsonc` | 🟡 MEDIUM | Removing `main` silently drops the Worker — assets serve without middleware |
 
 ---
 
