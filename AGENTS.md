@@ -67,8 +67,8 @@ All three must pass cleanly (zero errors, zero new warnings).
 
 ```
 portfolio/
-├── functions/                    # Cloudflare Pages Functions (edge Workers)
-│   └── _middleware.ts            # Content-negotiation: serves Markdown to agents
+├── worker.ts                     # ⚠️ Cloudflare Worker entry point — Markdown content negotiation
+├── wrangler.jsonc                # Wrangler config — references worker.ts + dist/ asset directory
 ├── html/seo/                     # HTML partials injected into index.html at build time
 │   ├── primary.html              # <title>, <meta description>, canonical
 │   ├── og.html                   # Open Graph tags
@@ -123,6 +123,7 @@ portfolio/
 ├── .prettierrc                   # Prettier config
 └── components.json               # shadcn/ui config
 ```
+
 
 ---
 
@@ -221,15 +222,19 @@ These files live in `public/` and are served as static assets:
 | `public/sitemap.xml` | XML sitemap — list all public pages; update `<lastmod>` when pages are added or removed |
 | `public/index.md` | Full Markdown snapshot of the portfolio — **keep in sync when profile/experience/projects/skills/education/certifications change** |
 
-### Markdown Content Negotiation (`functions/_middleware.ts`)
+### Markdown Content Negotiation (`worker.ts`)
 
-A Cloudflare Pages Function intercepts every request:
-- If `Accept` header contains `text/markdown` → fetches `/index.md`, returns it with `Content-Type: text/markdown`, `Vary: Accept`, and `x-markdown-tokens`.
-- Otherwise → passes through to normal HTML, but also stamps `Vary: Accept` so caches never conflate HTML and Markdown variants.
+The site is deployed as a **Cloudflare Worker** (not Pages). `worker.ts` is the Worker entry point; it wraps the static-asset bundle (`dist/`) via `env.ASSETS`:
+
+- If `Accept` header contains `text/markdown` → fetches `/index.md` from assets, returns it with `Content-Type: text/markdown`, `Vary: Accept`, and `x-markdown-tokens`.
+- Otherwise → serves the static asset normally but stamps `Vary: Accept` so caches never conflate HTML and Markdown variants.
+
+`wrangler.jsonc` at the repo root references `worker.ts` as `main` and `dist/` as the asset directory. **Do not remove `main` from `wrangler.jsonc`** — without it the Worker script is not deployed and all requests are served as plain static assets with no content negotiation.
 
 **When you update content in `src/data/`, you must also update `public/index.md`** to keep the Markdown snapshot in sync.
 
 ---
+
 
 ## Change Playbooks
 
@@ -273,7 +278,8 @@ This scaffolds into `src/components/ui/`. Do not hand-write shadcn components.
 | `src/components/GlassSurface.tsx` | 🔴 HIGH | Complex SVG filter pipeline; visual regressions are subtle |
 | `src/index.css` | 🟡 MEDIUM | Many components depend on the CSS class names defined here |
 | `src/types/index.ts` | 🟡 MEDIUM | Type changes ripple through all components and data files |
-| `functions/_middleware.ts` | 🟡 MEDIUM | Runs on every request at the edge; caching semantics are sensitive |
+| `worker.ts` | 🟡 MEDIUM | Runs on every request at the edge; caching semantics are sensitive |
+| `wrangler.jsonc` | 🟡 MEDIUM | Removing `main` silently drops the Worker — assets serve without middleware |
 
 ---
 
